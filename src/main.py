@@ -28,12 +28,14 @@ if __name__ == "__main__":
 	print("Product: ", device.get_product_string())
 	try:
 		while True:
+			# FIXME: Lots of MPG counts are dropping, need to check if it's a
+			#  problem with this program or with the actual controller
 			values = struct.unpack('xxBBBBbx', device.read(8))
 			vals = dict(zip(fields, values))
-			print("Read: ", vals)
+			#print("Read: ", vals)
 			for item in vals:
-				if vals[item] != previous[item]:
-					print(item)
+				if vals[item] != previous[item] and vals[item] != 0:
+					print(f"{item}: {vals[item]}")
 			previous = vals
 
 	except KeyboardInterrupt:
