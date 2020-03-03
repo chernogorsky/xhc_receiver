@@ -27,8 +27,15 @@ if __name__ == "__main__":
 	print("Manufacturer: ", device.get_manufacturer_string())
 	print("Product: ", device.get_product_string())
 	try:
-		while 1:
-			print("Read: ", device.read(100))
+		while True:
+			values = struct.unpack('xxBBBBbx', device.read(8))
+			vals = dict(zip(fields, values))
+			print("Read: ", vals)
+			for item in vals:
+				if vals[item] != previous[item]:
+					print(item)
+			previous = vals
+
 	except KeyboardInterrupt:
 		pass
 	device.close()
