@@ -2,9 +2,22 @@
 import sys
 import struct
 import hidapi
+import threading
+import queue
+import time
 
 fields = ['key1', 'key2', 'sel_incr', 'sel_axis', 'mpg_incr']
 previous = dict.fromkeys(fields)
+queue = queue.Queue(0)
+
+
+def receiver():
+	while True:
+		time.sleep(0.001)
+		frame = device.read(8)
+		if frame:
+			queue.put_nowait(frame)
+
 
 if __name__ == "__main__":
 	vendor_id = 0x10CE
@@ -20,25 +33,27 @@ if __name__ == "__main__":
 		print('\t', attr, ':', device_info.__getattribute__(attr))
 	device = hidapi.Device
 	try:
-		device = hidapi.Device(device_info, blocking=True)
+		device = hidapi.Device(device_info, blocking=False)
 	except OSError as e:
 		print(e, file=sys.stderr)
 		exit(2)
 	print("Manufacturer: ", device.get_manufacturer_string())
 	print("Product: ", device.get_product_string())
 	try:
+		t1 = threading.Thread(target=receiver)
+		t1.daemon = True
+		t1.start()
 		while True:
 			# FIXME: Lots of MPG counts are dropping, need to check if it's a
 			#  problem with this program or with the actual controller
-			values = struct.unpack('xxBBBBbx', device.read(8))
+			values = struct.unpack("xxBBBBbx", queue.get(block=True))
 			vals = dict(zip(fields, values))
 			#print("Read: ", vals)
 			for item in vals:
 				if vals[item] != previous[item] and vals[item] != 0:
 					print(f"{item}: {vals[item]}")
 			previous = vals
-
 	except KeyboardInterrupt:
-		pass
+		print('')
 	device.close()
 	exit(0)
