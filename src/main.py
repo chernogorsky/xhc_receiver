@@ -5,9 +5,9 @@ import hidapi
 import threading
 import queue
 import time
+import decoder
 
 fields = ['key1', 'key2', 'sel_incr', 'sel_axis', 'mpg_incr']
-previous = dict.fromkeys(fields)
 queue = queue.Queue(0)
 
 
@@ -48,11 +48,7 @@ if __name__ == "__main__":
 			#  problem with this program or with the actual controller
 			values = struct.unpack("xxBBBBbx", queue.get(block=True))
 			vals = dict(zip(fields, values))
-			#print("Read: ", vals)
-			for item in vals:
-				if vals[item] != previous[item] and vals[item] != 0:
-					print(f"{item}: {vals[item]}")
-			previous = vals
+			decoder.DecoderThread(vals.copy())
 	except KeyboardInterrupt:
 		print('')
 	device.close()
