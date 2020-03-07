@@ -4,8 +4,8 @@ import struct
 import hidapi
 import threading
 import queue
-import time
-import decoder
+#import time
+#import decoder
 
 fields = ['key1', 'key2', 'sel_incr', 'sel_axis', 'mpg_incr']
 queue = queue.Queue(0)
@@ -13,7 +13,7 @@ queue = queue.Queue(0)
 
 def receiver():
 	while True:
-		time.sleep(0.001)
+		#time.sleep(0.001)
 		frame = device.read(8)
 		if frame:
 			queue.put_nowait(frame)
@@ -33,7 +33,7 @@ if __name__ == "__main__":
 		print('\t', attr, ':', device_info.__getattribute__(attr))
 	device = hidapi.Device
 	try:
-		device = hidapi.Device(device_info, blocking=False)
+		device = hidapi.Device(device_info, blocking=True)
 	except OSError as e:
 		print(e, file=sys.stderr)
 		exit(2)
@@ -48,7 +48,9 @@ if __name__ == "__main__":
 			#  problem with this program or with the actual controller
 			values = struct.unpack("xxBBBBbx", queue.get(block=True))
 			vals = dict(zip(fields, values))
-			decoder.DecoderThread(vals.copy())
+			#decoder.DecoderThread(vals.copy())
+			for item, value in vals.items():
+				print("{0}: {1}".format(item, value))
 	except KeyboardInterrupt:
 		print('')
 	device.close()
