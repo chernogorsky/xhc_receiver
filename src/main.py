@@ -42,17 +42,10 @@ if __name__ == "__main__":
 		print(s.getsockname())
 		i = 0
 		while True:
-			# FIXME: Lots of MPG counts are dropping, need to check if it's a
-			#  problem with this program or with the actual controller
 			values = struct.unpack("xxBBBBbx", queue.get(block=True))
 			vals = dict(zip(fields, values))
-			#decoder.DecoderThread(vals.copy())
-			#for item, value in vals.items():
-				#print("{0}: {1}".format(item, value))
-			if vals.items() != previous.items():
-				s.sendto(json.dumps({'contents' : vals, 'index': i}).encode('UTF-8'), ('localhost', 61111))
-				i += 1
-			previous = vals
+			s.sendto(json.dumps({'contents' : vals, 'index': i}).encode('UTF-8'), ('localhost', 61111))
+			i += 1
 	except KeyboardInterrupt:
 		print('')
 	device.close()
