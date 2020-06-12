@@ -14,9 +14,9 @@ Download the latest release from the releases section (or clone the
 repository) and extract it to wherever you want it.
 
 ## Dependencies
-This driver requires [Python 3](python.org),
-the [_hidapi_](github.com/libusb/hidapi) library and
-the Python3 _hidapi_ wrapper library [hid](github.com/apmorton/pyhidapi)
+This driver requires [Python 3](https://python.org),
+the [_hidapi_](https://github.com/libusb/hidapi) library and
+the Python3 _hidapi_ wrapper library [hid](https://github.com/apmorton/pyhidapi)
 
 ### Installing the HIDAPI library
 
@@ -26,17 +26,17 @@ install it.
 
 You may find variations like _libhidapi-hidraw_ and _libhidapi-libusb_,
 which are wrappers arround different usb libraries. If you choose the 
-[_libusb_](libusb.info) backend, you'll also need to install it.
+[_libusb_](https://libusb.info) backend, you'll also need to install it.
 
 #### Windows
 On Windows, the easiest way is to download the pre-compiled binaries from
-the [releases section](github.com/libusb/hidapi/releases) and copy the
+the [releases section](https://github.com/libusb/hidapi/releases) and copy the
 _hidapi.dll_ files from the _x64_ and _x86_ directories to C:\Windows\SysWOW64
 and C:\Windows\System32, respectively.
 
 #### OSX
 There are no current binary distributions of _hidapi_ for OSX, so you'll
-have to see the [hidapi's README file](github.com/libusb/hidapi#mac)
+have to see the [hidapi's README file](https://github.com/libusb/hidapi#mac)
 for instructions on how to build from source.
 
 # Usage
