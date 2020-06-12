@@ -42,9 +42,10 @@ for instructions on how to build from source.
 # Usage
 ***This driver is still in alpha development, so this information may become
 inacurate with further development***
+
 To run this driver simply start the _main.py_ and _actions.py_ scripts.
 
-## Linux
+### Using Linux
 On linux you'll need to run the scripts as root, otherwise it
 cannot connect to the pendant on use the serial port.
 
