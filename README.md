@@ -51,4 +51,4 @@ cannot connect to the pendant on use the serial port.
 
 # License
 This project is licensed under the MIT license. To view the full license text,
-see the [LICENSE](/LICENSE.md) file.
+see the [LICENSE](/LICENSE) file.
