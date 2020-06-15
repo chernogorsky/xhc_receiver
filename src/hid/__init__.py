@@ -1,6 +1,5 @@
-import os
-import ctypes
 import atexit
+import ctypes
 
 __all__ = ['HIDException', 'DeviceInfo', 'Device', 'enumerate']
 
@@ -19,15 +18,12 @@ library_paths = (
 )
 
 for lib in library_paths:
-    for lib_path in ('./' + lib, lib):
-        try:
-            hidapi = ctypes.cdll.LoadLibrary(lib_path)
-            print("Loaded library: " + lib_path)
-            break
-        except OSError:
-            pass
-    if hidapi is not None:
+    try:
+        hidapi = ctypes.cdll.LoadLibrary(lib)
+        print("Loaded library: " + lib)
         break
+    except OSError:
+        pass
 else:
     error = "Unable to load any of the following libraries:{}"\
         .format(' '.join(library_paths))

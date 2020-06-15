@@ -1,23 +1,16 @@
 #!/usr/bin/env python3
-import json
+import os
 import queue
-import socket
-import struct
 import sys
-import threading
+
+from actions import Actions
+from receiver import Receiver
+
+os.add_dll_directory(os.getcwd())
 
 import hid
 
-fields = ['key1', 'key2', 'sel_incr', 'sel_axis', 'mpg_incr']
 queue = queue.Queue(0)
-
-
-def receiver():
-    while True:
-        frame = device.read(8, timeout=None)
-        if frame is not None:
-            queue.put_nowait(frame)
-
 
 if __name__ == "__main__":
     vendor_id = 0x10CE
@@ -34,21 +27,17 @@ if __name__ == "__main__":
     except OSError as e:
         print(e, file=sys.stderr)
         exit(2)
-    try:
-        t1 = threading.Thread(target=receiver)
-        t1.daemon = True
-        t1.start()
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.bind(('localhost', 61101))
-        print(s.getsockname())
-        i = 0
-        while True:
-            values = struct.unpack("xxBBBBbx", queue.get(block=True))
-            vals = dict(zip(fields, values))
-            s.sendto(json.dumps({'contents': vals, 'index': i}).encode('UTF-8'), ('localhost', 61111))
-            i += 1
-    except KeyboardInterrupt:
-        print('')
+    receiver = Receiver(queue, device)
+    actions = Actions(queue)
+    receiver.start()
+    actions.start()
+    while True:
+        if input("").lower() == 'quit':
+            break
+    receiver.quit()
+    actions.quit()
+    receiver.join()
+    actions.join()
     device.close()
-    s.close()
+    # s.close()
     exit(0)

@@ -1,26 +1,28 @@
 #!/usr/bin/env python3
 import socket
+import threading
+import queue
 
 
-def key1_action(x):
-    return {
-        1: reset,
-        2: stop,
-        3: start_pause,
-        4: feed_plus,
-        5: feed_minus,
-        6: spindle_plus,
-        7: spindle_minus,
-        8: machine_home,
-        9: safe_z,
-        10: work_home,
-        11: spindle_on_off,
-        12: noop,
-        13: probe_z,
-        14: continuous,
-        15: step,
-        16: noop
-    }[x]
+class Actions(threading.Thread):
+    def __init__(self, input_queue: queue.Queue):
+        self.queue = input_queue
+        self.interrupt = False
+        threading.Thread.__init__(self, name="XHC_Action")
+
+    def start(self) -> None:
+        threading.Thread.start(self)
+
+    def run(self):
+        while not self.interrupt:
+            try:
+                action = self.queue.get(block=True, timeout=1)
+                print(action)
+            except queue.Empty:
+                pass
+
+    def quit(self):
+        self.interrupt = True
 
 
 def reset():
