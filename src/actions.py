@@ -17,75 +17,15 @@ class Actions(threading.Thread):
         while not self.interrupt:
             try:
                 action = self.queue.get(block=True, timeout=1)
-                print(action)
+                if action != 'noop':
+                    with open('nc_commands/' + action + '.nc', 'r') as command:
+                        content = command.read()
+                        print(content)
             except queue.Empty:
                 pass
 
     def quit(self):
         self.interrupt = True
-
-
-def reset():
-    print("Reset")
-
-
-def stop():
-    print("Stop")
-
-
-def start_pause():
-    print("Start/Pause")
-
-
-def feed_plus():
-    print("Feed+")
-
-
-def feed_minus():
-    print("Feed-")
-
-
-def spindle_plus():
-    print("Spindle+")
-
-
-def spindle_minus():
-    print("Spindle-")
-
-
-def machine_home():
-    # G28
-    print("Machine Home")
-
-
-def safe_z():
-    print("Safe Z")
-
-
-def work_home():
-    # Set work home on selected axis
-    print("Work Home")
-
-
-def spindle_on_off():
-    print("Spindle On/Off")
-
-
-def probe_z():
-    # Set tool offset
-    print("Probe Z")
-
-
-def continuous():
-    print("Continuous")
-
-
-def step():
-    print("Step")
-
-
-def noop():
-    pass
 
 
 if __name__ == "__main__":
