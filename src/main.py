@@ -32,7 +32,8 @@ if __name__ == "__main__":
     receiver.start()
     actions.start()
     while True:
-        if input("").lower() == 'quit':
+        inp = input("").lower()
+        if inp == 'quit' or inp == 'exit':
             break
     receiver.quit()
     actions.quit()
