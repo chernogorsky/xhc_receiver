@@ -39,6 +39,5 @@ if __name__ == "__main__":
     actions.quit()
     receiver.join()
     actions.join()
-    device.close()
     # s.close()
     exit(0)

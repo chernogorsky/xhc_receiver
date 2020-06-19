@@ -16,9 +16,10 @@ class Receiver(threading.Thread):
 
     def receive(self):
         while not self.interrupt:
-            frame = self.device.read(8, timeout=1)
+            frame = self.device.read(8, timeout=1000)
             if len(frame) > 0:
                 q.put_nowait(frame)
+        self.device.close()
 
     def run(self):
         while not self.interrupt:
@@ -42,8 +43,7 @@ class Receiver(threading.Thread):
                     if incr is not None:
                         count = pulses / incr
                         if count != 0.0:
-                            print('Axis: {}'.format(axis))
-                            print('Count: {}'.format(count))
+                            print('mpg_incr({},{})'.format(axis, count))
 
             except queue.Empty:
                 pass
