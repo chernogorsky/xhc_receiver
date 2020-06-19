@@ -82,12 +82,19 @@ class Receiver(threading.Thread):
                 values = struct.unpack("xxBBBBbx", frame)
                 vals = dict(zip(fields, values))
                 k1 = vals.get('key1')
-                if k1 != 'fn' and k1 != 'noop':
-                    self.queue.put(key1_action(k1))
-                elif k1 == 'fn':
+                key1 = key1_action(k1)
+                if key1 != 'fn' and key1 != 'noop':
+                    self.queue.put(key1)
+                elif key1 == 'fn':
                     k2 = vals.get('key2')
-                    self.queue.put(key2_action(k2))
+                    key2 = key2_action(k2)
+                    if key2 != 'noop':
+                        self.queue.put(key2)
                 else:
+                    # count = vals.get('mpg_incr')
+                    # axis = vals.get('sel_axis')
+                    # print('Axis: {}'.format(axis))
+                    # print('Count: {}'.format(count))
                     pass
             except queue.Empty:
                 pass
