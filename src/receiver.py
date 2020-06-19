@@ -20,11 +20,44 @@ def key1_action(x):
         9: 'safe_z',
         10: 'work_home',
         11: 'spindle_on_off',
-        12: 'noop',
+        12: 'fn',
         13: 'probe_z',
         14: 'continuous',
         15: 'step',
         16: 'noop'
+    }[x]
+
+
+def key2_action(x):
+    return {
+        0: 'noop',
+        1: 'noop',
+        2: 'noop',
+        3: 'noop',
+        4: 'macro_1',
+        5: 'macro_2',
+        6: 'macro_3',
+        7: 'macro_4',
+        8: 'macro_5',
+        9: 'macro_6',
+        10: 'macro_7',
+        11: 'macro_8',
+        12: 'noop',
+        13: 'macro_9',
+        14: 'noop',
+        15: 'noop',
+        16: 'macro_10'
+    }[x]
+
+
+def axis_selection(x):
+    return {
+        0: 'x',
+        1: 'y',
+        2: 'z',
+        3: 'a',
+        4: 'b',
+        5: 'c'
     }[x]
 
 
@@ -49,7 +82,13 @@ class Receiver(threading.Thread):
                 values = struct.unpack("xxBBBBbx", frame)
                 vals = dict(zip(fields, values))
                 k1 = vals.get('key1')
-                self.queue.put(key1_action(k1))
+                if k1 != 'fn' and k1 != 'noop':
+                    self.queue.put(key1_action(k1))
+                elif k1 == 'fn':
+                    k2 = vals.get('key2')
+                    self.queue.put(key2_action(k2))
+                else:
+                    pass
             except queue.Empty:
                 pass
 
