@@ -36,12 +36,15 @@ class Receiver(threading.Thread):
                     if key2 != 'noop':
                         self.queue.put(key2)
                 else:
-                    count = vals.get('mpg_incr')
+                    pulses = vals.get('mpg_incr')
                     axis = axis_selection(vals.get('sel_axis'))
-                    incr = axis_incr(vals.get('sel_incr'))
-                    print('Axis: {}'.format(axis))
-                    print('Count: {}x{}'.format(count, incr))
-                    pass
+                    incr = axis_incr_denominator(vals.get('sel_incr'))
+                    if incr is not None:
+                        count = pulses / incr
+                        if count != 0.0:
+                            print('Axis: {}'.format(axis))
+                            print('Count: {}'.format(count))
+
             except queue.Empty:
                 pass
 
@@ -110,12 +113,12 @@ def axis_selection(x):
     }[x]
 
 
-def axis_incr(x):
+def axis_incr_denominator(x):
     return {
         0: None,
-        13: 0.001,  # 2%
-        14: 0.01,  # 5%
-        15: 0.1,  # 10%
+        13: 1000.0,  # 2%
+        14: 100.0,  # 5%
+        15: 10.0,  # 10%
         16: 1.0,  # 30%
         26: None,  # 60%
         27: None,  # 100%
