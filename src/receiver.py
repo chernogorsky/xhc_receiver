@@ -38,8 +38,9 @@ class Receiver(threading.Thread):
                 else:
                     count = vals.get('mpg_incr')
                     axis = axis_selection(vals.get('sel_axis'))
+                    incr = axis_incr(vals.get('sel_incr'))
                     print('Axis: {}'.format(axis))
-                    print('Count: {}'.format(count))
+                    print('Count: {}x{}'.format(count, incr))
                     pass
             except queue.Empty:
                 pass
@@ -106,4 +107,17 @@ def axis_selection(x):
         20: 'a',
         21: 'b',
         22: 'c',
+    }[x]
+
+
+def axis_incr(x):
+    return {
+        0: None,
+        13: 0.001,  # 2%
+        14: 0.01,  # 5%
+        15: 0.1,  # 10%
+        16: 1.0,  # 30%
+        26: None,  # 60%
+        27: None,  # 100%
+        155: None  # Lead
     }[x]
