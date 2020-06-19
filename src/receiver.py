@@ -91,10 +91,10 @@ class Receiver(threading.Thread):
                     if key2 != 'noop':
                         self.queue.put(key2)
                 else:
-                    # count = vals.get('mpg_incr')
-                    # axis = vals.get('sel_axis')
-                    # print('Axis: {}'.format(axis))
-                    # print('Count: {}'.format(count))
+                    count = vals.get('mpg_incr')
+                    axis = axis_selection(vals.get('sel_axis'))
+                    print('Axis: {}'.format(axis))
+                    print('Count: {}'.format(count))
                     pass
             except queue.Empty:
                 pass
