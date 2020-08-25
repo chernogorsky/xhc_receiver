@@ -1,13 +1,8 @@
 #!/usr/bin/env python3
-import os
 import queue
 import sys
-
 from actions import Actions
 from receiver import Receiver
-
-os.add_dll_directory(os.getcwd())
-
 import hid
 
 queue = queue.Queue(0)

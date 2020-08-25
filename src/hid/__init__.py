@@ -1,5 +1,6 @@
 import atexit
 import ctypes
+import os
 
 __all__ = ['HIDException', 'DeviceInfo', 'Device', 'enumerate']
 
@@ -16,6 +17,7 @@ library_paths = (
     'hidapi.dll',
     'libhidapi-0.dll'
 )
+os.add_dll_directory(os.getcwd())
 
 for lib in library_paths:
     try:
