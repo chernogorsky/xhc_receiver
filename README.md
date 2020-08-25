@@ -15,8 +15,13 @@ repository) and extract it to wherever you want it.
 
 ## Dependencies
 This driver requires [Python 3](https://python.org),
-the [_hidapi_](https://github.com/libusb/hidapi) library and
-the Python3 _hidapi_ wrapper library [hid](https://github.com/apmorton/pyhidapi)
+the [_hidapi_](https://github.com/libusb/hidapi) library ~~and
+the Python3 _hidapi_ wrapper library (https://github.com/apmorton/pyhidapi)~~
+
+#### UPDATE
+For better integration, a modified version of the refered Python _hidapi_ 
+wrapper has been included in the sources, so there's no need to install it
+as a dependency anymore.
 
 ### Installing the HIDAPI library
 
@@ -41,9 +46,9 @@ for instructions on how to build from source.
 
 # Usage
 ***This driver is still in alpha development, so this information may become
-inacurate with further development***
+inaccurate with further development***
 
-To run this driver simply start the _main.py_ and _actions.py_ scripts.
+To run this driver simply start the _main.py_ ~~and _actions.py_~~ script.
 
 ### Using Linux
 On linux you'll need to run the scripts as root, otherwise it
