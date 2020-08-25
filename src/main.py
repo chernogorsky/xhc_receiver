@@ -5,16 +5,16 @@ from actions import Actions
 from receiver import Receiver
 import hid
 
+vendor_id = 0x10CE
+product_id = 0xEB93
 queue = queue.Queue(0)
 
 if __name__ == "__main__":
-    vendor_id = 0x10CE
-    product_id = 0xEB93
     device_info = hid.enumerate(vendor_id, product_id)
     if not device_info:
         print('No device found')
         exit(1)
-    device_info = device_info.__getitem__(0)
+    device_info = device_info.__getitem__(0)    # Always use first match
     print('Device found!')
     device = hid.Device
     try:
@@ -28,11 +28,10 @@ if __name__ == "__main__":
     actions.start()
     while True:
         inp = input("").lower()
-        if inp == 'quit' or inp == 'exit':
+        if inp == 'quit' or inp == 'exit' or inp == 'q':
             break
     receiver.quit()
     actions.quit()
     receiver.join()
     actions.join()
-    # s.close()
     exit(0)
