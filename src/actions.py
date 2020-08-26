@@ -32,21 +32,20 @@ class Actions(threading.Thread):
         while not self.interrupt:
             try:
                 action = str(self.queue.get(block=True, timeout=1))
-                if action.startswith('mpg'):
-                    filename = 'mpg'
+                if self.serial.out_waiting > 0:
+                    print('Buffer not empty, command discarded')
                 else:
-                    filename = action
-                with open('nc_commands/' + filename + '.nc', 'r') as command:
-                    content = command.read()
-                    if filename == 'mpg':
-                        t = parse.parse('mpg({},{})', action)
-                        content = content.format(t[0], t[1])
-                    print('Sending command \'{}\''.format(content))
-                    content_bytes = content.encode("UTF-8")
-                    if self.serial.out_waiting > 0:
-                        print('Buffer not empty, command discarded')
-                        continue
+                    if action.startswith('mpg'):
+                        filename = 'mpg'
                     else:
+                        filename = action
+                    with open('nc_commands/' + filename + '.nc', 'r') as command:
+                        content = command.read()
+                        if filename == 'mpg':
+                            t = parse.parse('mpg({},{})', action)
+                            content = content.format(t[0], t[1])
+                        print('Sending command \'{}\''.format(content))
+                        content_bytes = content.encode("UTF-8")
                         self.serial.write(content_bytes)
                         print('Done')
             except queue.Empty:
