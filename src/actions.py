@@ -39,16 +39,14 @@ class Actions(threading.Thread):
                 with open('nc_commands/' + filename + '.nc', 'r') as command:
                     content = command.read()
                     if filename == 'mpg':
-                        print(action)
                         t = parse.parse('mpg({},{})', action)
-                        print(t)
                         content = content.format(t[0], t[1])
-                    print(self.serial.in_waiting)
-                    self.serial.setRTS(1)
-                    while not self.serial.getCTS():
-                        print('Not ready')
-                    self.serial.write(content.encode('UTF-8'))
-                    print(content)
+                    print('Sending command \'{:s}\'' % content)
+                    content_bytes = content.encode("UTF-8")
+                    for byte in content_bytes:
+                        self.serial.write(byte)
+                        self.serial.flushOutput()
+                    print('Done')
             except queue.Empty:
                 pass
 
