@@ -4,6 +4,7 @@ import threading
 import queue
 import serial
 import parse
+from time import sleep
 
 
 class Actions(threading.Thread):
@@ -22,6 +23,10 @@ class Actions(threading.Thread):
             rtscts=False
         )
         if self.serial.isOpen():
+            while self.serial.in_waiting == 0:
+                print('Waiting')
+                sleep(0.5)
+            print('Connected')
             self.serial.write('%'.encode('UTF-8'))
             threading.Thread.__init__(self, name="XHC_Action")
 
