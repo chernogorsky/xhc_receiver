@@ -10,6 +10,12 @@ product_id = 0xEB93
 queue = queue.Queue(0)
 
 if __name__ == "__main__":
+    try:
+        port = sys.argv[1]
+        print('Using port %s' % port)
+    except NameError:
+        print('Serial port needed')
+        exit(1)
     device_info = hid.enumerate(vendor_id, product_id)
     if not device_info:
         print('No device found')
@@ -23,7 +29,7 @@ if __name__ == "__main__":
         print(e, file=sys.stderr)
         exit(2)
     receiver = Receiver(queue, device)
-    actions = Actions(queue)
+    actions = Actions(queue, port, 19200)
     receiver.start()
     actions.start()
     while True:

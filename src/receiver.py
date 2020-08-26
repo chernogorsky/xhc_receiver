@@ -43,7 +43,7 @@ class Receiver(threading.Thread):
                     if incr is not None:
                         count = pulses / incr
                         if count != 0.0:
-                            self.queue.put('mpg_incr({},{})'.format(axis, count))
+                            self.queue.put('mpg({},{})'.format(axis, count))
 
             except queue.Empty:
                 pass
@@ -104,12 +104,12 @@ def axis_selection(x):
     return {
         0: None,
         6: None,
-        17: 'x',
-        18: 'y',
-        19: 'z',
-        20: 'a',
-        21: 'b',
-        22: 'c',
+        17: 'X',
+        18: 'Y',
+        19: 'Z',
+        20: 'A',
+        21: 'B',
+        22: 'C',
     }[x]
 
 

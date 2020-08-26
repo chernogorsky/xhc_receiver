@@ -2,13 +2,28 @@
 import socket
 import threading
 import queue
+import serial
+import parse
 
 
 class Actions(threading.Thread):
-    def __init__(self, input_queue: queue.Queue):
+    def __init__(self, input_queue: queue.Queue, port, baudrate):
         self.queue = input_queue
         self.interrupt = False
-        threading.Thread.__init__(self, name="XHC_Action")
+        self.serial = serial.Serial(
+            port=port,
+            baudrate=baudrate,
+            bytesize=serial.SEVENBITS,
+            parity=serial.PARITY_EVEN,
+            stopbits=serial.STOPBITS_TWO,
+            timeout=None,
+            xonxoff=True,
+            dsrdtr=False,
+            rtscts=False
+        )
+        if self.serial.isOpen():
+            self.serial.write('%'.encode('UTF-8'))
+            threading.Thread.__init__(self, name="XHC_Action")
 
     def start(self) -> None:
         threading.Thread.start(self)
@@ -16,15 +31,29 @@ class Actions(threading.Thread):
     def run(self):
         while not self.interrupt:
             try:
-                action = self.queue.get(block=True, timeout=1)
-                if action != 'noop':
-                    with open('nc_commands/' + action + '.nc', 'r') as command:
-                        content = command.read()
-                        print(content)
+                action = str(self.queue.get(block=True, timeout=1))
+                if action.startswith('mpg'):
+                    filename = 'mpg'
+                else:
+                    filename = action
+                with open('nc_commands/' + filename + '.nc', 'r') as command:
+                    content = command.read()
+                    if filename == 'mpg':
+                        print(action)
+                        t = parse.parse('mpg({},{})', action)
+                        print(t)
+                        content = content.format(t[0], t[1])
+                    print(self.serial.in_waiting)
+                    self.serial.setRTS(1)
+                    while not self.serial.getCTS():
+                        print('Not ready')
+                    self.serial.write(content.encode('UTF-8'))
+                    print(content)
             except queue.Empty:
                 pass
 
     def quit(self):
+        self.serial.write('%'.encode('UTF-8'))
         self.interrupt = True
 
 

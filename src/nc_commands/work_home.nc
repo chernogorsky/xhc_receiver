@@ -1,2 +1,4 @@
+
 (--Work Home procedure--)
-G28
+G28 Z0
+

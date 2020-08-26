@@ -1,2 +1,4 @@
 (--Machine Home procedure--)
-G29 G0 X0 Y0 Z0
+G17 G40 G49 G91 G53
+G28 Z0
+
