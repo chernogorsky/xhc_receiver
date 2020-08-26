@@ -32,7 +32,9 @@ class Actions(threading.Thread):
         while not self.interrupt:
             try:
                 action = str(self.queue.get(block=True, timeout=1))
-                if self.serial.out_waiting > 0:
+                buf = self.serial.out_waiting
+                print(buf)
+                if buf > 0:
                     print('Buffer not empty, command discarded')
                 else:
                     if action.startswith('mpg'):
