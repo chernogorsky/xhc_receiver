@@ -33,6 +33,7 @@ class Actions(threading.Thread):
             try:
                 action = str(self.queue.get(block=True, timeout=1))
                 buf = self.serial.in_waiting
+                self.serial.read(buf)
                 if buf == 0:
                     print('Buffer full, command discarded')
                 else:
