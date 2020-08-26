@@ -43,10 +43,11 @@ class Actions(threading.Thread):
                         content = content.format(t[0], t[1])
                     print('Sending command \'{}\''.format(content))
                     content_bytes = content.encode("UTF-8")
-                    for byte in content_bytes:
-                        self.serial.write(byte)
-                    self.serial.flushOutput()
-                    print('Done')
+                    if self.serial.out_waiting > 0:
+                        print('Buffer not empty, command discarded')
+                    else:
+                        self.serial.write(content_bytes)
+                        print('Done')
             except queue.Empty:
                 pass
 
