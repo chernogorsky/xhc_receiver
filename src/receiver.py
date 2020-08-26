@@ -38,13 +38,13 @@ class Receiver(threading.Thread):
                         self.queue.put(key2)
                 else:
                     pulses = vals.get('mpg_incr')
-                    pulses = pulses / abs(pulses)
                     axis = axis_selection(vals.get('sel_axis'))
                     incr = axis_incr_denominator(vals.get('sel_incr'))
                     if incr is not None:
-                        count = pulses / incr
-                        if count != 0.0:
-                            self.queue.put('mpg({},{})'.format(axis, count))
+                        if pulses < 0:
+                            incr = - incr
+                        if incr != 0.0:
+                            self.queue.put('mpg({},{})'.format(axis, incr))
 
             except queue.Empty:
                 pass
