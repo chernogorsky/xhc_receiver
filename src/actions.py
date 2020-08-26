@@ -45,7 +45,7 @@ class Actions(threading.Thread):
                     content_bytes = content.encode("UTF-8")
                     for byte in content_bytes:
                         self.serial.write(byte)
-                        self.serial.flushOutput()
+                    self.serial.flushOutput()
                     print('Done')
             except queue.Empty:
                 pass
