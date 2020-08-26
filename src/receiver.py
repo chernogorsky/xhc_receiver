@@ -40,9 +40,9 @@ class Receiver(threading.Thread):
                     pulses = vals.get('mpg_incr')
                     axis = axis_selection(vals.get('sel_axis'))
                     incr = axis_incr_denominator(vals.get('sel_incr'))
-                    if incr is not None:
+                    if incr is not None and pulses != 0:
                         if pulses < 0:
-                            incr = - incr
+                            incr = 0 - incr
                         if incr != 0.0:
                             self.queue.put('mpg({},{})'.format(axis, incr))
 
