@@ -28,6 +28,7 @@ class Actions(threading.Thread):
                 sleep(0.5)
             print('Connected')
             self.serial.write('%'.encode('UTF-8'))
+            self.serial.write('G17 G40 G49 G91 G53'.encode('UTF-8'))
             threading.Thread.__init__(self, name="XHC_Action")
 
     def start(self) -> None:
