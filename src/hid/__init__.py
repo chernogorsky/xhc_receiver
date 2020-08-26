@@ -7,17 +7,16 @@ __all__ = ['HIDException', 'DeviceInfo', 'Device', 'enumerate']
 
 hidapi = None
 library_paths = (
-    'libhidapi-hidraw.so',
-    'libhidapi-hidraw.so.0',
     'libhidapi-libusb.so',
     'libhidapi-libusb.so.0',
+    'libhidapi-hidraw.so',
+    'libhidapi-hidraw.so.0',
     'libhidapi-iohidmanager.so',
     'libhidapi-iohidmanager.so.0',
     'libhidapi.dylib',
     'hidapi.dll',
     'libhidapi-0.dll'
 )
-os.add_dll_directory(os.getcwd())
 
 for lib in library_paths:
     try:
