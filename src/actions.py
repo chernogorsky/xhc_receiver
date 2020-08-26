@@ -45,6 +45,7 @@ class Actions(threading.Thread):
                     content_bytes = content.encode("UTF-8")
                     if self.serial.out_waiting > 0:
                         print('Buffer not empty, command discarded')
+                        continue
                     else:
                         self.serial.write(content_bytes)
                         print('Done')
