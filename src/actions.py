@@ -41,7 +41,7 @@ class Actions(threading.Thread):
                     if filename == 'mpg':
                         t = parse.parse('mpg({},{})', action)
                         content = content.format(t[0], t[1])
-                    print('Sending command \'{:s}\'' % content)
+                    print('Sending command \'{}\''.format(content))
                     content_bytes = content.encode("UTF-8")
                     for byte in content_bytes:
                         self.serial.write(byte)
