@@ -17,7 +17,7 @@ class Actions(threading.Thread):
             parity=serial.PARITY_EVEN,
             stopbits=serial.STOPBITS_TWO,
             timeout=None,
-            xonxoff=True,
+            xonxoff=False,
             dsrdtr=False,
             rtscts=False
         )
@@ -32,10 +32,9 @@ class Actions(threading.Thread):
         while not self.interrupt:
             try:
                 action = str(self.queue.get(block=True, timeout=1))
-                buf = self.serial.out_waiting
-                print(buf)
-                if buf > 0:
-                    print('Buffer not empty, command discarded')
+                buf = self.serial.in_waiting
+                if buf == 0:
+                    print('Buffer full, command discarded')
                 else:
                     if action.startswith('mpg'):
                         filename = 'mpg'

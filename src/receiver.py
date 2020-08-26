@@ -43,7 +43,7 @@ class Receiver(threading.Thread):
                     if incr is not None:
                         count = pulses / incr
                         if count != 0.0:
-                            self.queue.put('mpg({},{})'.format(axis, count))
+                            self.queue.put('mpg({},{})'.format(axis, incr))
 
             except queue.Empty:
                 pass
