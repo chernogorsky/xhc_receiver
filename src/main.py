@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 import queue
 import sys
+
+import hid
 from actions import Actions
 from receiver import Receiver
-import hid
 
 vendor_id = 0x10CE
 product_id = 0xEB93

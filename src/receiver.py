@@ -1,8 +1,8 @@
-import threading
-import struct
 import queue
+import struct
+import threading
 
-fields = ['key1', 'key2', 'sel_incr', 'sel_axis', 'mpg_incr']
+fields = ['key1', 'key2', 'sel_inc', 'sel_axis', 'mpg_inc']
 q = queue.Queue(100)
 
 
@@ -39,12 +39,12 @@ class Receiver(threading.Thread):
                 else:
                     pulses = vals.get('mpg_incr')
                     axis = axis_selection(vals.get('sel_axis'))
-                    incr = axis_incr_denominator(vals.get('sel_incr'))
-                    if incr is not None and pulses != 0:
+                    inc = axis_incr_denominator(vals.get('sel_incr'))
+                    if inc is not None and pulses != 0:
                         if pulses < 0:
-                            incr = 0 - incr
-                        if incr != 0.0:
-                            self.queue.put('mpg({},{})'.format(axis, incr))
+                            inc = 0 - inc
+                        if inc != 0.0:
+                            self.queue.put('mpg({},{})'.format(axis, inc))
 
             except queue.Empty:
                 pass
