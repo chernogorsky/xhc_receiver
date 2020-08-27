@@ -1,12 +1,12 @@
 import atexit
 import ctypes
-import os
+import platform
 
 __all__ = ['HIDException', 'DeviceInfo', 'Device', 'enumerate']
 
 
 hidapi = None
-library_paths = (
+library_paths_x64 = (
     'libhidapi-libusb.so',
     'libhidapi-libusb.so.0',
     'libhidapi-hidraw.so',
@@ -14,11 +14,29 @@ library_paths = (
     'libhidapi-iohidmanager.so',
     'libhidapi-iohidmanager.so.0',
     'libhidapi.dylib',
+    'hidapi.dll',
     'hidapi_x64.dll',
+    'libhidapi-0.dll'
+)
+library_paths_x86 = (
+    'libhidapi-libusb.so',
+    'libhidapi-libusb.so.0',
+    'libhidapi-hidraw.so',
+    'libhidapi-hidraw.so.0',
+    'libhidapi-iohidmanager.so',
+    'libhidapi-iohidmanager.so.0',
+    'libhidapi.dylib',
+    'hidapi.dll',
     'hidapi_x86.dll',
     'libhidapi-0.dll'
 )
+print(platform.architecture()[0])
 
+
+if platform.architecture()[0] == '64bit':
+    library_paths = library_paths_x64
+else:
+    library_paths = library_paths_x86
 for lib in library_paths:
     try:
         hidapi = ctypes.cdll.LoadLibrary(lib)
