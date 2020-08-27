@@ -30,7 +30,6 @@ library_paths_x86 = (
     'hidapi_x86.dll',
     'libhidapi-0.dll'
 )
-print(platform.architecture()[0])
 
 
 if platform.architecture()[0] == '64bit':
