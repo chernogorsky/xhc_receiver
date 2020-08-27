@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-import socket
-import threading
 import queue
-import serial
-import parse
+import threading
 from time import sleep
+
+import parse
+import serial
 
 
 class PortException(BaseException):
@@ -66,28 +66,8 @@ class Actions(threading.Thread):
                         print('Done')
             except queue.Empty:
                 pass
+        self.serial.write('%'.encode('UTF-8'))
+        self.serial.close()
 
     def quit(self):
-        self.serial.write('%'.encode('UTF-8'))
         self.interrupt = True
-
-
-if __name__ == "__main__":
-    srv = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    try:
-        srv.bind(('localhost', 61111))  # Allocate random port
-    except socket.error as e:
-        print("Socket bind failed with error code {0}: {0}".format(e.errno, e.getMessage()))
-    print(srv.getsockname())
-    try:
-        while True:
-            data, addr = srv.recvfrom(1024)
-            if not data:
-                continue
-            print("From {0}: {1}".format(addr, data))
-
-    except KeyboardInterrupt:
-        pass
-    srv.close()
-    print('')
-    exit(0)
