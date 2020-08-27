@@ -37,9 +37,9 @@ class Receiver(threading.Thread):
                     if key2 != 'noop':
                         self.queue.put(key2)
                 else:
-                    pulses = vals.get('mpg_incr')
+                    pulses = vals.get('mpg_inc')
                     axis = axis_selection(vals.get('sel_axis'))
-                    inc = axis_incr_denominator(vals.get('sel_incr'))
+                    inc = axis_incr_denominator(vals.get('sel_inc'))
                     if inc is not None and pulses != 0:
                         if pulses < 0:
                             inc = 0 - inc
