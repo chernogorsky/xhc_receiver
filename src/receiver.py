@@ -41,10 +41,10 @@ class Receiver(threading.Thread):
                     axis = axis_selection(vals.get('sel_axis'))
                     inc = axis_incr_denominator(vals.get('sel_inc'))
                     if inc is not None and pulses != 0:
+                        if key1 != 'continuous':
+                            inc = min(inc, 1.0)
                         if pulses < 0:
                             inc = 0 - inc
-                        if key1 != 'continuous':
-                            inc = max(min(inc, -1.0), 1.0)
                         if inc != 0.0:
                             self.queue.put('mpg({},{})'.format(axis, inc))
 
