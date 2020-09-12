@@ -48,6 +48,12 @@ class Actions(threading.Thread):
     def start(self) -> None:
         threading.Thread.start(self)
 
+    def reset_serial(self):
+        self.serial.reset_output_buffer()
+        self.serial.reset_input_buffer()
+        self.serial.close()
+        self.init_serial()
+
     def run(self):
         while not self.interrupt:
             try:
@@ -56,6 +62,8 @@ class Actions(threading.Thread):
                 self.serial.flushInput()
                 if buf == 0:
                     print('Buffer full, command discarded')
+                    if action == 'reset':
+                        self.reset_serial()
                 else:
                     if action.startswith('mpg'):
                         filename = 'mpg'
@@ -71,10 +79,7 @@ class Actions(threading.Thread):
                         self.serial.write(content_bytes)
                         print('Done')
                     if filename == 'reset':
-                        self.serial.reset_output_buffer()
-                        self.serial.reset_input_buffer()
-                        self.serial.close()
-                        self.init_serial()
+                        self.reset_serial()
             except queue.Empty:
                 pass
         self.serial.write('%'.encode('UTF-8'))
