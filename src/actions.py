@@ -18,11 +18,7 @@ class Actions(threading.Thread):
         self.port = port
         self.baudrate = baudrate
         self.serial = serial.Serial
-        try:
-            self.init_serial()
-        except serial.SerialException as ex:
-            print(ex)
-            exit(-1)
+        threading.Thread.__init__(self, name="XHC_Action")
 
     def init_serial(self):
         self.serial = serial.Serial(
@@ -45,9 +41,9 @@ class Actions(threading.Thread):
             print('Connected')
             self.serial.write('%\n'.encode('UTF-8'))
             self.serial.write('G17G40G49G91G53\n'.encode('UTF-8'))
-            super().__init__(self, name="XHC_Action")
 
     def start(self) -> None:
+        self.init_serial()
         super().start()
 
     def reset_serial(self):
