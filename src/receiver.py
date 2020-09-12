@@ -29,7 +29,7 @@ class Receiver(threading.Thread):
                 vals = dict(zip(fields, values))
                 k1 = vals.get('key1')
                 key1 = key1_action(k1)
-                if key1 != 'fn' and key1 != 'noop':
+                if key1 != 'fn' and key1 != 'noop' and key1 != 'continuous':
                     self.queue.put(key1)
                 elif key1 == 'fn':
                     k2 = vals.get('key2')
@@ -43,6 +43,8 @@ class Receiver(threading.Thread):
                     if inc is not None and pulses != 0:
                         if pulses < 0:
                             inc = 0 - inc
+                        if key1 != 'continuous':
+                            inc = max(min(inc, -1.0), 1.0)
                         if inc != 0.0:
                             self.queue.put('mpg({},{})'.format(axis, inc))
 
