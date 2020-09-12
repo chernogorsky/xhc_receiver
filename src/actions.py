@@ -70,6 +70,11 @@ class Actions(threading.Thread):
                         content_bytes = content.encode("UTF-8")
                         self.serial.write(content_bytes)
                         print('Done')
+                    if filename == 'reset':
+                        self.serial.reset_output_buffer()
+                        self.serial.close()
+                        self.serial.reset_input_buffer()
+                        self.init_serial()
             except queue.Empty:
                 pass
         self.serial.write('%'.encode('UTF-8'))
