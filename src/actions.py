@@ -5,6 +5,7 @@ from time import sleep
 
 import parse
 import serial
+from sys import stdin
 
 
 class PortException(BaseException):
@@ -64,6 +65,8 @@ class Actions(threading.Thread):
                         content_bytes = content.encode("UTF-8")
                         self.serial.write(content_bytes)
                         print('Done')
+                    if filename == 'reset':
+                        print('q', file=stdin)
             except queue.Empty:
                 pass
         self.serial.write('%'.encode('UTF-8'))
