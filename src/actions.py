@@ -37,16 +37,15 @@ class Actions(threading.Thread):
             rtscts=False
         )
         if self.serial.isOpen():
-            while self.serial.in_waiting == 0:
+            while self.serial.in_waiting == 0 and not self.interrupt:
                 print('Waiting')
                 sleep(0.5)
+            if self.interrupt:
+                return
             print('Connected')
             self.serial.write('%\n'.encode('UTF-8'))
             self.serial.write('G17G40G49G91G53\n'.encode('UTF-8'))
             threading.Thread.__init__(self, name="XHC_Action")
-
-    def start(self) -> None:
-        self.start(self)
 
     def reset_serial(self):
         self.serial.reset_output_buffer()
