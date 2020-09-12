@@ -126,4 +126,4 @@ def axis_incr_denominator(x):
         26: 5.0,  # 60%
         27: 10.0,  # 100%
         155: 20.0  # Lead
-    }[x]
+    }.get(x, None)
