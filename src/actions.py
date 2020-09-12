@@ -15,29 +15,35 @@ class Actions(threading.Thread):
     def __init__(self, input_queue: queue.Queue, port, baudrate):
         self.queue = input_queue
         self.interrupt = False
+        self.port = port
+        self.baudrate = baudrate
+        self.serial = serial.Serial
         try:
-            self.serial = serial.Serial(
-                port=port,
-                baudrate=baudrate,
-                bytesize=serial.SEVENBITS,
-                parity=serial.PARITY_EVEN,
-                stopbits=serial.STOPBITS_TWO,
-                timeout=None,
-                xonxoff=False,
-                dsrdtr=False,
-                rtscts=False
-            )
-            if self.serial.isOpen():
-                while self.serial.in_waiting == 0:
-                    print('Waiting')
-                    sleep(0.5)
-                print('Connected')
-                self.serial.write('%\n'.encode('UTF-8'))
-                self.serial.write('G17G40G49G91G53\n'.encode('UTF-8'))
-                threading.Thread.__init__(self, name="XHC_Action")
+            self.init_serial()
         except serial.SerialException as ex:
             print(ex)
             exit(-1)
+
+    def init_serial(self):
+        self.serial = serial.Serial(
+            port=self.port,
+            baudrate=self.baudrate,
+            bytesize=serial.SEVENBITS,
+            parity=serial.PARITY_EVEN,
+            stopbits=serial.STOPBITS_TWO,
+            timeout=None,
+            xonxoff=False,
+            dsrdtr=False,
+            rtscts=False
+        )
+        if self.serial.isOpen():
+            while self.serial.in_waiting == 0:
+                print('Waiting')
+                sleep(0.5)
+            print('Connected')
+            self.serial.write('%\n'.encode('UTF-8'))
+            self.serial.write('G17G40G49G91G53\n'.encode('UTF-8'))
+            threading.Thread.__init__(self, name="XHC_Action")
 
     def start(self) -> None:
         threading.Thread.start(self)
