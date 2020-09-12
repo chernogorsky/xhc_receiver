@@ -47,6 +47,9 @@ class Actions(threading.Thread):
             self.serial.write('G17G40G49G91G53\n'.encode('UTF-8'))
             threading.Thread.__init__(self, name="XHC_Action")
 
+    def start(self) -> None:
+        self.start(self)
+
     def reset_serial(self):
         self.serial.reset_output_buffer()
         self.serial.reset_input_buffer()
