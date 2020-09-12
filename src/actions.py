@@ -46,7 +46,7 @@ class Actions(threading.Thread):
             threading.Thread.__init__(self, name="XHC_Action")
 
     def start(self) -> None:
-        threading.Thread.start(self)
+        self.start(self)
 
     def reset_serial(self):
         self.serial.reset_output_buffer()
