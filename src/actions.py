@@ -72,8 +72,8 @@ class Actions(threading.Thread):
                         print('Done')
                     if filename == 'reset':
                         self.serial.reset_output_buffer()
-                        self.serial.close()
                         self.serial.reset_input_buffer()
+                        self.serial.close()
                         self.init_serial()
             except queue.Empty:
                 pass
