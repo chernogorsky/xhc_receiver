@@ -15,7 +15,7 @@ library_paths_x64 = (
     'libhidapi-iohidmanager.so.0',
     'libhidapi.dylib',
     'hidapi.dll',
-    'hidapi_x64.dll',
+    './hidapi_x64.dll',
     'libhidapi-0.dll'
 )
 library_paths_x86 = (
@@ -27,7 +27,7 @@ library_paths_x86 = (
     'libhidapi-iohidmanager.so.0',
     'libhidapi.dylib',
     'hidapi.dll',
-    'hidapi_x86.dll',
+    './hidapi_x86.dll',
     'libhidapi-0.dll'
 )
 
