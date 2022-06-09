@@ -17,6 +17,7 @@ class Receiver(threading.Thread):
     def receive(self):
         while not self.interrupt:
             frame = self.device.read(8, timeout=1000)
+            # print(frame)
             if len(frame) > 0:
                 q.put(frame)
         self.device.close()
@@ -25,17 +26,29 @@ class Receiver(threading.Thread):
         while not self.interrupt:
             try:
                 frame = q.get(block=True, timeout=1)
+                # print(frame)
                 values = struct.unpack("xxBBBBbx", frame)
+                print(fields,values)
+
+
+
+
                 vals = dict(zip(fields, values))
+
+                self.pendant.SetAxisFromUSB(vals.get('sel_axis'))
+
+
                 k1 = vals.get('key1')
                 key1 = key1_action(k1)
                 if key1 != 'fn' and key1 != 'noop' and key1 != 'continuous':
                     self.queue.put(key1)
+                    # print (key1)
                 elif key1 == 'fn':
                     k2 = vals.get('key2')
                     key2 = key2_action(k2)
                     if key2 != 'noop':
                         self.queue.put(key2)
+                        # print(key2)
                 else:
                     pulses = vals.get('mpg_inc')
                     axis = axis_selection(vals.get('sel_axis'))
@@ -47,6 +60,8 @@ class Receiver(threading.Thread):
                             inc = 0 - inc
                         if inc != 0.0:
                             self.queue.put('mpg({},{})'.format(axis, inc))
+                            # print('mpg({},{})'.format(axis, inc))
+                self.pendant.UpdateDisplay()
 
             except queue.Empty:
                 pass
@@ -107,12 +122,14 @@ def axis_selection(x):
     return {
         0: None,
         6: None,
+        16: None,
         17: 'X',
         18: 'Y',
         19: 'Z',
         20: 'A',
         21: 'B',
         22: 'C',
+        23: None,
     }[x]
 
 

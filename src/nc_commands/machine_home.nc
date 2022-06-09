@@ -1,2 +1,1 @@
-G17G40G49G91G53
-G28Z0
+M98 P"/macros/xhc/machine_home.g"
